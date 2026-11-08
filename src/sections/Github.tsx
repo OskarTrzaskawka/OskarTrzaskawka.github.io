@@ -110,14 +110,14 @@ function Heatmap({ data }: { data: Contributions }) {
 
 function GithubBody({ section, promise }: { section: GithubSection; promise: Promise<GithubData> }) {
   const { user, repos, contributions } = use(promise)
-  const own = useMemo(
-    () => repos.filter((r) => !r.fork && !r.archived && !section.exclude?.includes(r.name)),
-    [repos, section.exclude],
-  )
   const priv = useMemo(
     () => (section.privateRepos ? privateRepos.filter((r) => !section.exclude?.includes(r.name)) : []),
     [section.privateRepos, section.exclude],
   )
+  const own = useMemo(() => {
+    const isPrivate = new Set(privateRepos.map((r) => r.name))
+    return repos.filter((r) => !r.fork && !r.archived && !isPrivate.has(r.name) && !section.exclude?.includes(r.name))
+  }, [repos, section.exclude])
   const stars = own.reduce((a, r) => a + r.stargazers_count, 0)
   const top = own
     .toSorted((a, b) => b.stargazers_count - a.stargazers_count || +new Date(b.pushed_at) - +new Date(a.pushed_at))
@@ -144,9 +144,15 @@ function GithubBody({ section, promise }: { section: GithubSection; promise: Pro
         </a>
         <dl className="gh-stats">
           <div>
-            <dd>{user.public_repos + priv.length}</dd>
-            <dt>{ui.repos}</dt>
+            <dd>{own.length}</dd>
+            <dt>{priv.length ? ui.publicCount : ui.repos}</dt>
           </div>
+          {priv.length > 0 && (
+            <div>
+              <dd>{priv.length}</dd>
+              <dt>{ui.privateCount}</dt>
+            </div>
+          )}
           <div>
             <dd>{stars.toLocaleString('en')}</dd>
             <dt>{ui.stars}</dt>
@@ -182,6 +188,11 @@ function GithubBody({ section, promise }: { section: GithubSection; promise: Pro
         </Reveal>
       )}
 
+      {priv.length > 0 && (
+        <h3 className="gh-subhead">
+          <Icon name="book" className="size-4" /> {ui.publicRepos} <small>{own.length}</small>
+        </h3>
+      )}
       <div className="gh-repos">
         {top.map((r, i) => (
           <Reveal key={r.name} delay={i * 0.05}>

@@ -402,7 +402,7 @@ A URL replaces the persona's link with the same icon, or is added if missing.
 | `about` | Bio + facts | optional `image` |
 | `contact` | Headline, links, form | `rotating`, `form` |
 
-¹ `privateRepos: true` also lists your private repos (marked **Private**, not linked). They are fetched at **build time** with `GH_PRIVATE_TOKEN` (or `gh auth token` locally), so the token never reaches the browser — but repo names and descriptions become public. On GitHub Actions, add a fine-grained token with *Metadata: read* as the `GH_PRIVATE_TOKEN` secret.
+¹ `privateRepos: true` also lists your private repos (marked **Private**, not linked). They are fetched at **build time** with `GH_PRIVATE_TOKEN` (or `gh auth token` locally), so the token never reaches the browser — but repo names and descriptions become public. Public and private repos are listed and counted separately. On GitHub Actions, add a fine-grained token with *Metadata: read* as the `GH_PRIVATE_TOKEN` secret — or deploy with `npm run deploy` and skip the token.
 
 Every section accepts `id`, `nav` (label or `false` to hide from the menu), `eyebrow`, `title` and `intro`.
 
@@ -430,6 +430,16 @@ With an endpoint, messages are sent in the background and the visitor sees a tha
 3. *(Optional)* **Settings → Secrets and variables → Actions → Variables**: add `VITE_PERSONA`, `VITE_NAME`, `VITE_GITHUB_USERNAME`… (same names as `.env`).
 4. Push. Your site goes live at `https://<you>.github.io/<repo>/`. The base path is detected automatically.
 
+### GitHub Pages without Actions (`npm run deploy`)
+
+No Actions minutes, nothing to configure on GitHub: build on your machine and push `dist/` to a `gh-pages` branch.
+
+1. Put your settings in `.env` (e.g. `VITE_PERSONA`, `VITE_SITE_URL`). For a project site add `VITE_BASE=/<repo>/`; a user site (`<you>.github.io`) keeps `/`.
+2. Run `npm run deploy` (or `npm run deploy -- <remote>` for a remote other than `origin`).
+3. Once: **Settings → Pages → Source: Deploy from a branch → `gh-pages` / root**.
+
+Bonus: with `privateRepos: true` the local build uses your `gh auth token`, so no token secret is needed.
+
 ### Vercel · Netlify · Cloudflare Pages
 
 | Setting | Value |
@@ -455,6 +465,7 @@ Set the variable `VITE_SHOWCASE=true` (or run `npm run build:showcase`). Visitor
 | `npm run build` | Typecheck + production build |
 | `npm run build:showcase` | Build with every persona + switcher |
 | `npm run preview` | Serve the production build |
+| `npm run deploy` | Build locally and push `dist/` to the `gh-pages` branch |
 | `npm run lint` | Oxlint |
 | `npm run typecheck` | TypeScript 7 |
 | `npm run new-persona -- <id> [template]` | Scaffold a new persona |

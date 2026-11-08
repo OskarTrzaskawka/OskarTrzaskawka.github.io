@@ -1414,6 +1414,10 @@ kbd {
   font-size: 0.85rem;
   color: var(--muted);
 }
+.gh-langs + .gh-subhead,
+.gh-heatmap + .gh-subhead {
+  margin-top: 8px;
+}
 .gh-subhead small {
   opacity: 0.7;
 }
