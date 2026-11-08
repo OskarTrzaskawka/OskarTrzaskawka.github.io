@@ -387,7 +387,7 @@ A URL replaces the persona's link with the same icon, or is added if missing.
 
 | Type | What it renders | Notable options |
 | --- | --- | --- |
-| `projects` | Project grid + case-study dialog | `layout: cards \| bento \| spotlight \| list`, `filters`, `metrics`, `art`, `imageFit: contain` (whole banner, no crop) |
+| `projects` | Project grid + case-study dialog | `layout: cards \| bento \| spotlight \| list`, `filters`, `metrics`, `art`, `imageFit: contain` (whole banner, no crop), `url` ² |
 | `github` | Live repos, stars, languages, heatmap | `username`, `limit`, `contributions`, `languages`, `exclude`, `privateRepos` ¹ |
 | `gallery` | Masonry/grid + lightbox | `layout`, `filters`, per-image `exif` |
 | `terminal` | Interactive shell | `prompt`, custom `commands` |
@@ -403,6 +403,17 @@ A URL replaces the persona's link with the same icon, or is added if missing.
 | `contact` | Headline, links, form | `rotating`, `form` |
 
 ¹ `privateRepos: true` also lists your private repos (marked **Private**, not linked). They are fetched at **build time** with `GH_PRIVATE_TOKEN` (or `gh auth token` locally), so the token never reaches the browser — but repo names and descriptions become public. Public and private repos are listed and counted separately. On GitHub Actions, add a fine-grained token with *Metadata: read* as the `GH_PRIVATE_TOKEN` secret — or deploy with `npm run deploy` and skip the token.
+
+² **Projects from a link.** Give a project just a `url` and the build reads the site's meta tags: the title (`og:site_name` / `<title>`), the description and the `og:image` banner (downloaded into the build, so nothing is hotlinked). A link to the site is added too. Anything you write yourself wins, so you can override a single field:
+
+```ts
+items: [
+  { url: 'https://my-product.com' },                                   // everything from the page
+  { url: 'https://my-bot.gg', title: 'My Bot', tags: ['Discord'] },   // custom title + tags
+]
+```
+
+Previews are cached for a day in `node_modules/.cache/persona-folio`. If a site is down, the project still shows with its domain as the title and a generated cover.
 
 Every section accepts `id`, `nav` (label or `false` to hide from the menu), `eyebrow`, `title` and `intro`.
 

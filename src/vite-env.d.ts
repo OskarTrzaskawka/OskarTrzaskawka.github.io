@@ -25,6 +25,12 @@ declare module 'virtual:private-repos' {
   export default repos
 }
 
+declare module 'virtual:link-previews' {
+  /** url → meta tags read at build time for link-only projects. */
+  const previews: Record<string, import('./core/types').LinkPreview>
+  export default previews
+}
+
 declare module 'virtual:active-persona' {
   const persona: import('./core/types').Persona
   export default persona
