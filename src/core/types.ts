@@ -42,9 +42,18 @@ export interface Fact {
 }
 
 export interface Project {
+  /** Optional when `url` is set (derived from the domain). */
   id: string
+  /** Optional when `url` is set (taken from the page's og:site_name / title). */
   title: Text
+  /** Optional when `url` is set (taken from the page's meta description). */
   summary: Text
+  /**
+   * A live site for this project. At build time its meta tags fill in anything you
+   * leave out — title, summary and cover image (og:image, downloaded) — and a link
+   * to the site is added. `{ url: 'https://example.com' }` alone is a valid project.
+   */
+  url?: string
   /** Longer case-study copy shown in the project dialog. Paragraphs. */
   body?: Text[]
   year?: string
@@ -63,6 +72,17 @@ export interface Project {
   metrics?: Fact[]
   status?: Text
 }
+
+/** Meta tags read from a project's `url` at build time. */
+export interface LinkPreview {
+  title?: string
+  description?: string
+  /** Root-relative path of the downloaded og:image. */
+  image?: string
+}
+
+/** A project as written in a persona file: with `url`, `id`/`title`/`summary` may be omitted. */
+export type ProjectInput = Omit<Project, 'id' | 'title' | 'summary'> & Partial<Pick<Project, 'id' | 'title' | 'summary'>>
 
 export interface GalleryItem {
   src: string
@@ -220,6 +240,9 @@ export type Section =
 
 export type SectionType = Section['type']
 
+/** Sections as written in a persona file (projects may be link-only). */
+export type SectionInput = Exclude<Section, ProjectsSection> | (Omit<ProjectsSection, 'items'> & { items: ProjectInput[] })
+
 /* -------------------------------------------------------------------------- */
 /*                                   Persona                                  */
 /* -------------------------------------------------------------------------- */
@@ -277,3 +300,6 @@ export interface Persona {
 
   footer?: { note?: Text }
 }
+
+/** What `definePersona` accepts: a Persona whose projects may be link-only. */
+export type PersonaInput = Omit<Persona, 'sections'> & { sections: SectionInput[] }

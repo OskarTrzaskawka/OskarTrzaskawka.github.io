@@ -1,15 +1,18 @@
 import { execFileSync } from 'node:child_process'
-import { existsSync, readdirSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { runnerImport, type Plugin } from 'vite'
 import { applyEnv, type Env } from '../src/core/env.ts'
 import { fontHref, templates } from '../src/core/templates.ts'
+import { loadLinkPreviews, type PreviewResult } from './link-previews.ts'
 import type { GithubSection, Persona, PrivateRepo } from '../src/core/types.ts'
 
 const VIRTUAL = 'virtual:active-persona'
 const RESOLVED = '\0' + VIRTUAL
 const PRIVATE = 'virtual:private-repos'
 const PRIVATE_RESOLVED = '\0' + PRIVATE
+const PREVIEWS = 'virtual:link-previews'
+const PREVIEWS_RESOLVED = '\0' + PREVIEWS
 
 /** Token for private repos: env first, then the local GitHub CLI. Never exposed to the client. */
 function githubToken(): string | undefined {
@@ -62,6 +65,7 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').repl
  *  - resolves `virtual:active-persona` to `src/personas/<VITE_PERSONA>.ts`
  *  - injects SEO, Open Graph, Twitter, JSON-LD, fonts and a no-flash theme script into index.html
  *  - emits robots.txt, sitemap.xml and manifest.webmanifest
+ *  - reads meta tags + og:image for link-only projects (`virtual:link-previews`)
  */
 export function persona(env: Env, root: string): Plugin {
   const dir = resolve(root, 'src/personas')
@@ -79,6 +83,7 @@ export function persona(env: Env, root: string): Plugin {
   let p: Persona
   let base = '/'
   let privateRepos: PrivateRepo[] = []
+  let links: PreviewResult = { previews: {}, files: {} }
 
   return {
     name: 'persona-folio',
@@ -90,14 +95,17 @@ export function persona(env: Env, root: string): Plugin {
       p = applyEnv(module.default, env)
       const gh = p.sections.find((s): s is GithubSection => s.type === 'github' && !!s.privateRepos)
       if (gh && !showcase) privateRepos = await fetchPrivateRepos(gh.username, gh.exclude)
+      links = await loadLinkPreviews(p, root)
     },
 
     resolveId(source) {
       if (source === VIRTUAL) return RESOLVED
       if (source === PRIVATE) return PRIVATE_RESOLVED
+      if (source === PREVIEWS) return PREVIEWS_RESOLVED
     },
     load(source) {
       if (source === PRIVATE_RESOLVED) return `export default ${JSON.stringify(privateRepos)}`
+      if (source === PREVIEWS_RESOLVED) return `export default ${JSON.stringify(links.previews)}`
       if (source === RESOLVED) return `export { default } from ${JSON.stringify(file.replaceAll('\\', '/'))}`
     },
 
@@ -166,6 +174,9 @@ export function persona(env: Env, root: string): Plugin {
     },
 
     generateBundle() {
+      for (const [name, path] of Object.entries(links.files)) {
+        this.emitFile({ type: 'asset', fileName: `og/${name}`, source: readFileSync(path) })
+      }
       const siteUrl = p.meta.url?.replace(/\/$/, '')
       this.emitFile({
         type: 'asset',
@@ -201,6 +212,14 @@ export function persona(env: Env, root: string): Plugin {
     },
 
     configureServer(server) {
+      // Downloaded link-preview images live in the cache; serve them in dev.
+      server.middlewares.use(`${base.replace(/\/$/, '')}/og`, (req, res, next) => {
+        const path = links.files[decodeURIComponent(req.url ?? '').replace(/^\//, '').split('?')[0]]
+        if (!path) return next()
+        const ext = path.split('.').pop() ?? ''
+        res.setHeader('Content-Type', ext === 'svg' ? 'image/svg+xml' : `image/${ext === 'jpg' ? 'jpeg' : ext}`)
+        res.end(readFileSync(path))
+      })
       server.middlewares.use('/manifest.webmanifest', (_req, res) => {
         res.setHeader('Content-Type', 'application/manifest+json')
         res.end(JSON.stringify({ name: p.meta.title, start_url: '/', display: 'standalone' }))
