@@ -36,6 +36,7 @@
     "dev:minimal": "vite --mode minimal",
     "build": "tsc --noEmit && vite build",
     "build:showcase": "vite build --mode showcase",
+    "deploy": "node scripts/deploy.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint src scripts",
