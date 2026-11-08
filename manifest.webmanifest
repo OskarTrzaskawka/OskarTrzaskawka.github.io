@@ -1,0 +1,16 @@
+{
+  "name": "Oskar T — AI & Full-Stack Developer",
+  "short_name": "OskarTrzaskawka",
+  "description": "AI & Full-Stack Developer from Poland. Building Muzes — digital services. Next.js, TypeScript, React, Node.js, MongoDB, Docker, Rust & Tauri.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
