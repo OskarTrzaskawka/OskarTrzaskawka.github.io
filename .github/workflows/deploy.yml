@@ -1,0 +1,67 @@
+# Deploys to GitHub Pages on every push to main.
+# Enable it once: Settings → Pages → Source: "GitHub Actions".
+# Configure the site with repository Variables (Settings → Secrets and variables → Actions → Variables),
+# e.g. VITE_PERSONA, VITE_NAME, VITE_GITHUB_USERNAME… — the same names as in .env.example.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - id: pages
+        uses: actions/configure-pages@v5
+      - run: npm ci
+      - name: Build
+        run: npm run build -- --mode ${{ vars.VITE_SHOWCASE == 'true' && 'showcase' || 'production' }}
+        env:
+          # Project pages live under /<repo>/ — user pages (<you>.github.io) under /.
+          VITE_BASE: ${{ steps.pages.outputs.base_path }}/
+          VITE_SITE_URL: ${{ vars.VITE_SITE_URL || steps.pages.outputs.base_url }}
+          VITE_PERSONA: ${{ vars.VITE_PERSONA }}
+          VITE_SHOWCASE: ${{ vars.VITE_SHOWCASE }}
+          VITE_TEMPLATE: ${{ vars.VITE_TEMPLATE }}
+          VITE_ACCENT_COLOR: ${{ vars.VITE_ACCENT_COLOR }}
+          VITE_NAME: ${{ vars.VITE_NAME }}
+          VITE_ROLE: ${{ vars.VITE_ROLE }}
+          VITE_EMAIL: ${{ vars.VITE_EMAIL }}
+          VITE_LOCATION: ${{ vars.VITE_LOCATION }}
+          VITE_GITHUB_USERNAME: ${{ vars.VITE_GITHUB_USERNAME }}
+          VITE_LINKEDIN_URL: ${{ vars.VITE_LINKEDIN_URL }}
+          VITE_X_URL: ${{ vars.VITE_X_URL }}
+          VITE_CONTACT_ENDPOINT: ${{ vars.VITE_CONTACT_ENDPOINT }}
+          VITE_CONTACT_ACCESS_KEY: ${{ vars.VITE_CONTACT_ACCESS_KEY }}
+          VITE_PLAUSIBLE_DOMAIN: ${{ vars.VITE_PLAUSIBLE_DOMAIN }}
+      - name: SPA fallback
+        run: cp dist/index.html dist/404.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

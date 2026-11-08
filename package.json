@@ -1,0 +1,65 @@
+{
+  "name": "persona-folio",
+  "description": "One codebase, many portfolios. A config-driven portfolio engine for developers, designers, photographers and writers — pick a persona in .env and ship.",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "license": "MIT",
+  "author": "Oskar Trzaskawka (https://github.com/OskarTrzaskawka)",
+  "homepage": "https://github.com/OskarTrzaskawka/persona-folio#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OskarTrzaskawka/persona-folio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OskarTrzaskawka/persona-folio/issues"
+  },
+  "keywords": [
+    "portfolio",
+    "portfolio-template",
+    "vite",
+    "react",
+    "tailwindcss",
+    "developer-portfolio",
+    "designer-portfolio",
+    "photography-portfolio",
+    "personal-website"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "dev:developer": "vite --mode developer",
+    "dev:designer": "vite --mode designer",
+    "dev:photographer": "vite --mode photographer",
+    "dev:minimal": "vite --mode minimal",
+    "build": "tsc --noEmit && vite build",
+    "build:showcase": "vite build --mode showcase",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src scripts",
+    "new-persona": "node scripts/new-persona.mjs",
+    "screenshots": "node scripts/screenshots.mjs",
+    "banner": "node scripts/banner.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "^1.70.0",
+    "motion": "^14.10.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "simple-icons": "^16.37.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.2.1",
+    "oxlint": "^1.92.0",
+    "playwright-core": "^1.65.0",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6"
+  }
+}

@@ -1,0 +1,216 @@
+import { definePersona } from '../core/define'
+
+/** Demo persona — a fictional brand & product designer. Replace with your own data. */
+export default definePersona({
+  id: 'designer',
+  label: 'Designer',
+  template: 'designer',
+  defaultScheme: 'light',
+
+  meta: {
+    title: 'Mira Novak — Brand & Product Designer',
+    description: 'Independent designer crafting brand identities, product interfaces and design systems for ambitious teams.',
+    keywords: ['brand designer', 'product designer', 'design systems', 'UI/UX', 'Kraków'],
+  },
+
+  person: {
+    name: 'Mira Novak',
+    shortName: 'Mira',
+    role: 'Brand & Product Designer',
+    location: 'Kraków, Poland',
+    timeZone: 'Europe/Warsaw',
+    email: 'mira@example.com',
+    availability: { status: 'limited', label: 'Booking from January' },
+  },
+
+  socials: [
+    { label: 'Dribbble', href: 'https://dribbble.com', icon: 'dribbble', handle: '@miranovak' },
+    { label: 'Behance', href: 'https://behance.net', icon: 'behance', handle: 'miranovak' },
+    { label: 'Instagram', href: 'https://instagram.com', icon: 'instagram', handle: '@mira.studio' },
+    { label: 'LinkedIn', href: 'https://linkedin.com', icon: 'linkedin', handle: 'Mira Novak' },
+  ],
+
+  hero: {
+    eyebrow: 'Independent design studio of one',
+    title: 'Design that\nfeels *inevitable.*',
+    subtitle: 'I help founders and product teams shape brands and interfaces people remember — from the first sketch to the last pixel.',
+    rotating: ['Brand identity', 'Product design', 'Design systems', 'Motion', 'Art direction'],
+    ctas: [
+      { label: 'Selected work', href: '#work', variant: 'primary' },
+      { label: 'Start a project', href: '#contact', variant: 'ghost' },
+    ],
+  },
+
+  sections: [
+    {
+      type: 'projects',
+      id: 'work',
+      nav: 'Work',
+      eyebrow: '(Selected work, 2021—2026)',
+      title: 'Recent *projects*',
+      layout: 'bento',
+      filters: true,
+      items: [
+        {
+          id: 'halcyon',
+          title: 'Halcyon Bank',
+          category: 'Brand',
+          year: '2026',
+          role: 'Brand identity, Design system',
+          featured: true,
+          summary: 'A calm, human identity for a neobank built around saving, not spending.',
+          body: [
+            'Halcyon wanted to feel like the opposite of a casino. We built the identity around slow motion, generous whitespace and a custom variable typeface that “breathes” with account balance.',
+            'The design system ships 140+ components in Figma and code, used by 4 product squads.',
+          ],
+          tags: ['Brand', 'Design system', 'Motion'],
+          metrics: [
+            { label: 'App store rating', value: '4.9' },
+            { label: 'Components', value: '140+' },
+          ],
+          art: { seed: 3, palette: ['#ff5a36', '#ffd166', '#1d1a16'] },
+        },
+        {
+          id: 'orbit',
+          title: 'Orbit Analytics',
+          category: 'Product',
+          year: '2025',
+          role: 'Product design',
+          summary: 'Dashboards that answer questions instead of raising them.',
+          tags: ['Product', 'Data viz'],
+          art: { seed: 11, palette: ['#4f46e5', '#22d3ee', '#0b1020'] },
+        },
+        {
+          id: 'fern',
+          title: 'Fern & Field',
+          category: 'Packaging',
+          year: '2025',
+          role: 'Packaging, Illustration',
+          summary: 'Packaging for an organic tea brand, printed with plant-based inks.',
+          tags: ['Packaging', 'Illustration'],
+          art: { seed: 5, palette: ['#2f855a', '#f6e05e', '#f4efe6'] },
+        },
+        {
+          id: 'pulse',
+          title: 'Pulse Health',
+          category: 'Product',
+          year: '2024',
+          role: 'Product design, Motion',
+          summary: 'A habit app where every interaction is a tiny reward.',
+          tags: ['Product', 'Motion'],
+          art: { seed: 17, palette: ['#ec4899', '#f97316', '#1f0a14'] },
+        },
+        {
+          id: 'atlas',
+          title: 'Atlas Type',
+          category: 'Brand',
+          year: '2023',
+          role: 'Type design',
+          summary: 'A geometric display family with 9 weights and a variable axis.',
+          tags: ['Brand', 'Typography'],
+          art: { seed: 29, palette: ['#111111', '#e5e5e5', '#ff5a36'] },
+        },
+        {
+          id: 'nova',
+          title: 'Nova Museum',
+          category: 'Brand',
+          year: '2022',
+          role: 'Identity, Wayfinding',
+          summary: 'A modular identity and signage system for a museum of light and sound.',
+          tags: ['Brand', 'Wayfinding'],
+          art: { seed: 41, palette: ['#7c3aed', '#f472b6', '#120a24'] },
+        },
+      ],
+    },
+    {
+      type: 'stats',
+      nav: false,
+      title: 'In numbers',
+      items: [
+        { value: 9, suffix: '+', label: 'Years designing' },
+        { value: 64, label: 'Brands launched' },
+        { value: 12, label: 'Awards' },
+        { value: 100, suffix: '%', label: 'Remote friendly' },
+      ],
+    },
+    {
+      type: 'services',
+      nav: 'Services',
+      eyebrow: '(What I do)',
+      title: 'Ways we can *work together*',
+      items: [
+        {
+          icon: 'palette',
+          title: 'Brand identity',
+          text: 'Strategy, naming support, logo, type, color and a living brand book.',
+          price: 'from €6k',
+          bullets: ['Workshops', 'Logo & type', 'Guidelines'],
+        },
+        {
+          icon: 'layout',
+          title: 'Product design',
+          text: 'Research-backed UX and polished UI for web and mobile apps.',
+          price: 'from €4k / mo',
+          bullets: ['Flows & prototypes', 'UI design', 'Usability tests'],
+        },
+        {
+          icon: 'layers',
+          title: 'Design systems',
+          text: 'Tokens, components and docs that keep teams fast and consistent.',
+          price: 'from €8k',
+          bullets: ['Tokens', 'Figma library', 'Docs site'],
+        },
+      ],
+    },
+    {
+      type: 'process',
+      nav: false,
+      eyebrow: '(Process)',
+      title: 'From blank page to *launch*',
+      steps: [
+        { title: 'Discover', text: 'Workshops, audits and interviews to find what makes you different.' },
+        { title: 'Define', text: 'A clear creative direction everyone can say yes to.' },
+        { title: 'Design', text: 'Iterative rounds with weekly check-ins and live Figma files.' },
+        { title: 'Deliver', text: 'Production-ready files, guidelines and a handover session.' },
+      ],
+    },
+    {
+      type: 'testimonials',
+      nav: false,
+      eyebrow: '(Kind words)',
+      title: 'Clients *say*',
+      items: [
+        { quote: 'Mira understood our brand better than we did. The new identity doubled our inbound leads within a quarter.', name: 'Jonas Weber', role: 'CEO, Halcyon' },
+        { quote: 'Rare combination of taste and rigor. Our design system finally feels like one product.', name: 'Ava Kim', role: 'Head of Product, Orbit' },
+        { quote: 'Fast, thoughtful and a joy to work with. Our packaging sold out in two weeks.', name: 'Leo Martín', role: 'Founder, Fern & Field' },
+      ],
+    },
+    {
+      type: 'about',
+      nav: 'About',
+      eyebrow: '(About)',
+      title: 'Hi, I’m Mira.',
+      body: [
+        'I’ve spent nine years designing for startups, agencies and global brands. Today I run a deliberately small studio so every client works directly with me.',
+        'I believe great design is mostly editing: removing everything that doesn’t make the idea stronger.',
+      ],
+      facts: [
+        { label: 'Based in', value: 'Kraków' },
+        { label: 'Previously', value: 'Studio Forma, Brightlab' },
+        { label: 'Tools', value: 'Figma, Rive, Glyphs' },
+        { label: 'Languages', value: 'PL, EN, DE' },
+      ],
+    },
+    {
+      type: 'contact',
+      nav: 'Contact',
+      title: 'Have an idea?',
+      rotating: [
+        'Let’s talk.',
+        'Let’s make it real.',
+      ],
+      text: 'Tell me about your project, timeline and budget. I reply within two working days.',
+      form: true,
+    },
+  ],
+})

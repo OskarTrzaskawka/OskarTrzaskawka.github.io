@@ -1,0 +1,23 @@
+name: Feature or new template
+description: Suggest a section, template, persona or env option
+labels: [enhancement]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - New section type
+        - New template
+        - New persona preset (e.g. musician, architect, writer)
+        - New .env option
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Describe it
+      description: Who is it for, and what would it look like? Links to inspiration welcome.
+    validations:
+      required: true

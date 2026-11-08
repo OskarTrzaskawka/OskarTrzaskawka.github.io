@@ -1,0 +1,23 @@
+name: Bug report
+description: Something looks or works wrong
+labels: [bug]
+body:
+  - type: input
+    id: persona
+    attributes:
+      label: Persona / template
+      placeholder: developer, designer, photographer, minimal, custom…
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Include steps to reproduce and a screenshot if it's visual.
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser & OS
+      placeholder: Chrome 140 / macOS 16

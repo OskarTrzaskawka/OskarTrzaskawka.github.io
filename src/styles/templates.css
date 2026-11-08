@@ -1,0 +1,341 @@
+/*
+ * Template tokens. Each template defines a dark + light palette and its typography.
+ * `persona.theme.accent` / VITE_ACCENT_COLOR override --accent at runtime.
+ * Selector order matters: inline --accent from JS wins over these.
+ */
+
+/* ======================= Developer — "Terminal Noir" ======================= */
+:root,
+[data-template='developer'] {
+  --font-body: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-head: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-code: 'Geist Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --head-weight: 600;
+  --head-tracking: -0.045em;
+  --card-radius: 20px;
+}
+[data-template='developer'][data-scheme='dark'],
+:root:not([data-scheme]) {
+  --bg: #09090b;
+  --surface: #111114;
+  --surface-2: #1b1b20;
+  --fg: #f4f4f5;
+  --muted: #a1a1aa;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.2);
+  --accent: oklch(0.86 0.18 160);
+  --accent-2: oklch(0.78 0.14 230);
+  --accent-fg: #052e16;
+}
+[data-template='developer'][data-scheme='light'] {
+  --bg: #f7f7f4;
+  --surface: #ffffff;
+  --surface-2: #efefeb;
+  --fg: #0a0a0b;
+  --muted: #5d5d68;
+  --line: rgb(0 0 0 / 0.08);
+  --line-strong: rgb(0 0 0 / 0.22);
+  --accent: oklch(0.58 0.16 160);
+  --accent-2: oklch(0.58 0.15 240);
+  --accent-fg: #ffffff;
+}
+[data-template='developer'] .hero h1 em {
+  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ============================ Designer — "Studio" ========================== */
+[data-template='designer'] {
+  --font-body: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-head: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-code: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-eyebrow: 'Inter Tight', sans-serif;
+  --eyebrow-case: none;
+  --eyebrow-tracking: 0;
+  --head-weight: 400;
+  --head-tracking: -0.025em;
+  --h1-size: clamp(3.6rem, 11vw, 10.5rem);
+  --h1-leading: 0.88;
+  --h2-size: clamp(2.8rem, 7vw, 6rem);
+  --contact-size: clamp(3.4rem, 11vw, 10rem);
+  --em-style: italic;
+  --card-radius: 28px;
+  --btn-radius: 999px;
+  --glow: 0%;
+  --grain: 0.06;
+}
+[data-template='designer'][data-scheme='light'] {
+  --bg: #f4efe6;
+  --surface: #fbf8f2;
+  --surface-2: #ece5d8;
+  --fg: #1d1a16;
+  --muted: #6f675c;
+  --line: rgb(29 26 22 / 0.12);
+  --line-strong: rgb(29 26 22 / 0.3);
+  --accent: #ff5a36;
+  --accent-2: #ffb547;
+  --accent-fg: #fff;
+}
+[data-template='designer'][data-scheme='dark'] {
+  --bg: #141210;
+  --surface: #1c1916;
+  --surface-2: #26221e;
+  --fg: #f4efe6;
+  --muted: #a39a8c;
+  --line: rgb(244 239 230 / 0.1);
+  --line-strong: rgb(244 239 230 / 0.28);
+  --accent: #ff6a47;
+  --accent-2: #ffc25e;
+  --accent-fg: #1d1a16;
+}
+[data-template='designer'] .section-head {
+  grid-template-columns: 1fr;
+}
+[data-template='designer'] .section-head h2 {
+  max-width: 14ch;
+}
+[data-template='designer'] .project-body h3,
+[data-template='designer'] .service h3,
+[data-template='designer'] .process h3,
+[data-template='designer'] .stats dd {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+[data-template='designer'] .project-card[data-big='true'] h3 {
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+}
+[data-template='designer'] .stats dd {
+  font-size: clamp(3.4rem, 7vw, 6rem);
+}
+[data-template='designer'] .project-card {
+  border: 0;
+  background: transparent;
+}
+[data-template='designer'] .project-card .cover {
+  border-radius: var(--card-radius);
+}
+[data-template='designer'] .project-body {
+  padding: 18px 4px 8px;
+}
+[data-template='designer'] .project-card:hover {
+  box-shadow: none;
+}
+[data-template='designer'] .tags li {
+  font-family: var(--font-body);
+}
+[data-template='designer'] .nav-pill {
+  background: var(--fg);
+}
+[data-template='designer'] .nav-links a[data-active='true'] {
+  color: var(--bg);
+}
+[data-template='designer'] .footer-big {
+  font-style: italic;
+  opacity: 0.22;
+}
+
+/* ======================== Photographer — "Darkroom" ======================== */
+[data-template='photographer'] {
+  --font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-head: 'Fraunces', ui-serif, Georgia, serif;
+  --font-code: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --head-weight: 300;
+  --head-tracking: -0.03em;
+  --h1-size: clamp(3rem, 8.5vw, 8rem);
+  --h1-leading: 0.95;
+  --em-style: italic;
+  --em-color: inherit;
+  --rotator-color: inherit;
+  --card-radius: 4px;
+  --gallery-radius: 2px;
+  --btn-radius: 2px;
+  --eyebrow-tracking: 0.22em;
+  --glow: 0%;
+  --grain: 0.04;
+}
+[data-template='photographer'][data-scheme='dark'] {
+  --bg: #060606;
+  --surface: #0f0f0f;
+  --surface-2: #181818;
+  --fg: #f2f0ec;
+  --muted: #8f8b84;
+  --line: rgb(242 240 236 / 0.09);
+  --line-strong: rgb(242 240 236 / 0.25);
+  --accent: #d6b98c;
+  --accent-2: #a78b62;
+  --accent-fg: #0b0b0b;
+}
+[data-template='photographer'][data-scheme='light'] {
+  --bg: #f2f0ec;
+  --surface: #faf9f6;
+  --surface-2: #e6e2db;
+  --fg: #141311;
+  --muted: #6f6b64;
+  --line: rgb(20 19 17 / 0.1);
+  --line-strong: rgb(20 19 17 / 0.28);
+  --accent: #8a6a3b;
+  --accent-2: #b08d57;
+  --accent-fg: #fff;
+}
+[data-template='photographer'] .hero h1 em {
+  font-weight: 300;
+}
+[data-template='photographer'] .section-head {
+  justify-items: center;
+  text-align: center;
+}
+[data-template='photographer'] .section-head h2 {
+  max-width: 20ch;
+}
+[data-template='photographer'] .section-head .lead {
+  margin-inline: auto;
+}
+[data-template='photographer'] .chips {
+  justify-content: center;
+}
+[data-template='photographer'] .nav:not([data-scrolled='true']) {
+  color: #fff;
+}
+[data-template='photographer'] .nav:not([data-scrolled='true']) .nav-links a {
+  color: rgb(255 255 255 / 0.75);
+}
+[data-template='photographer'] .nav:not([data-scrolled='true']) .nav-links a[data-active='true'],
+[data-template='photographer'] .nav:not([data-scrolled='true']) .nav-links a:hover {
+  color: #fff;
+}
+[data-template='photographer'] .nav:not([data-scrolled='true']) .icon-btn,
+[data-template='photographer'] .nav:not([data-scrolled='true']) .kbd-btn {
+  color: #fff;
+  border-color: rgb(255 255 255 / 0.25);
+  background: rgb(0 0 0 / 0.2);
+}
+[data-template='photographer'] .nav-pill {
+  background: rgb(127 127 127 / 0.18);
+}
+[data-template='photographer'] .stats dd {
+  font-weight: 300;
+}
+[data-template='photographer'] .btn {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+}
+
+/* ============================== Minimal — "Paper" ========================== */
+[data-template='minimal'] {
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-head: 'Newsreader', ui-serif, Georgia, serif;
+  --font-code: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-quote: 'Newsreader', serif;
+  --head-weight: 500;
+  --head-tracking: -0.015em;
+  --h1-size: clamp(2.2rem, 5vw, 3rem);
+  --h2-size: clamp(1.5rem, 2.4vw, 1.8rem);
+  --contact-size: clamp(2rem, 5vw, 3rem);
+  --em-style: italic;
+  --em-color: var(--fg);
+  --eyebrow-tracking: 0.12em;
+  --card-radius: 12px;
+  --glow: 0%;
+  --max-w: 720px;
+}
+[data-template='minimal'][data-scheme='light'] {
+  --bg: #fbfaf7;
+  --surface: #ffffff;
+  --surface-2: #f1efe9;
+  --fg: #1a1a1a;
+  --muted: #6b6b6b;
+  --line: rgb(0 0 0 / 0.09);
+  --line-strong: rgb(0 0 0 / 0.25);
+  --accent: #b5452c;
+  --accent-2: #d9822b;
+  --accent-fg: #fff;
+}
+[data-template='minimal'][data-scheme='dark'] {
+  --bg: #121212;
+  --surface: #181818;
+  --surface-2: #222;
+  --fg: #ececec;
+  --muted: #9a9a9a;
+  --line: rgb(255 255 255 / 0.09);
+  --line-strong: rgb(255 255 255 / 0.25);
+  --accent: #f08a6c;
+  --accent-2: #f2b16b;
+  --accent-fg: #121212;
+}
+[data-template='minimal'] .container:not(.narrow) {
+  --max-w: 720px;
+}
+[data-template='minimal'] .section {
+  padding-block: 48px;
+}
+[data-template='minimal'] .section-head {
+  margin-bottom: 24px;
+  gap: 6px;
+}
+[data-template='minimal'] .hero-sub {
+  font-family: var(--font-head);
+  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+  color: var(--fg);
+  line-height: 1.5;
+  max-width: none;
+}
+[data-template='minimal'] .hero-sub em {
+  color: var(--accent);
+}
+[data-template='minimal'] .nav-inner {
+  width: min(100% - 24px, 900px);
+}
+[data-template='minimal'] .timeline > li {
+  grid-template-columns: 130px 1fr;
+  padding: 22px 0;
+}
+[data-template='minimal'] .timeline-body h3 {
+  font-family: var(--font-body);
+  font-size: 1.02rem;
+  font-weight: 600;
+}
+[data-template='minimal'] .project-row-main strong,
+[data-template='minimal'] .post-main strong {
+  font-family: var(--font-body);
+  font-size: 1.02rem;
+}
+[data-template='minimal'] .skills {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+[data-template='minimal'] .skill-group {
+  padding: 0;
+  border: 0;
+}
+[data-template='minimal'] .skills-columns .tags {
+  display: grid;
+  gap: 6px;
+}
+[data-template='minimal'] .skills-columns .tags li {
+  border: 0;
+  padding: 0;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+[data-template='minimal'] .footer-big {
+  display: none;
+}
+[data-template='minimal'] .site-footer {
+  width: min(100% - 32px, 720px);
+}
+[data-template='minimal'] .contact-head h2 {
+  font-size: var(--contact-size);
+}
+[data-template='minimal'] .initials {
+  background: var(--fg);
+  color: var(--bg);
+  font-family: var(--font-head);
+  font-size: 1.3rem;
+}
+@media (max-width: 600px) {
+  [data-template='minimal'] .skills { grid-template-columns: 1fr 1fr; }
+}

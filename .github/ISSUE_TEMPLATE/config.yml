@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discord support server
+    url: https://discord.com/invite/U5fzuzbgkF
+    about: Questions, help with setup and showing off your portfolio.
+  - name: 📖 Documentation
+    url: https://github.com/OskarTrzaskawka/persona-folio#readme
+    about: Quick start, configuration reference, FAQ and troubleshooting.
