@@ -53,6 +53,8 @@ export interface Project {
   /** Used by the filter chips. Defaults to the first tag. */
   category?: string
   image?: string
+  /** `contain` shows the whole image (good for banners with text). Default `cover`. */
+  imageFit?: 'cover' | 'contain'
   logo?: string
   /** Generative cover when no image is provided — a seed + palette. */
   art?: { seed: number; palette?: string[] }
@@ -100,6 +102,16 @@ export interface ProjectsSection extends SectionBase {
   items: Project[]
 }
 
+/** Safe subset of a private repo, baked into the bundle at build time. */
+export interface PrivateRepo {
+  name: string
+  description: string | null
+  language: string | null
+  stargazers_count: number
+  forks_count: number
+  pushed_at: string
+}
+
 export interface GithubSection extends SectionBase {
   type: 'github'
   username: string
@@ -109,6 +121,12 @@ export interface GithubSection extends SectionBase {
   languages?: boolean
   /** Repos to hide (forks are always hidden). */
   exclude?: string[]
+  /**
+   * Also list your PRIVATE repos (marked "Private", not linked). Fetched at BUILD time with a
+   * token from GH_PRIVATE_TOKEN / GITHUB_TOKEN / `gh auth token` — the token never reaches the
+   * browser, but repo names and descriptions DO become public. Use `exclude` to hide some.
+   */
+  privateRepos?: boolean
 }
 
 export interface SkillsSection extends SectionBase {

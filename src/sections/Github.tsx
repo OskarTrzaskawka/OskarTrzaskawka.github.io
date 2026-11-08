@@ -1,4 +1,5 @@
-import { ArrowUpRight, GitFork, Star } from 'lucide-react'
+import { ArrowUpRight, GitFork, Lock, Star } from 'lucide-react'
+import privateRepos from 'virtual:private-repos'
 import { Component, Suspense, use, useMemo, type ReactNode } from 'react'
 import { Icon } from '../components/Icon'
 import { Reveal, SectionHead } from '../components/primitives'
@@ -113,19 +114,23 @@ function GithubBody({ section, promise }: { section: GithubSection; promise: Pro
     () => repos.filter((r) => !r.fork && !r.archived && !section.exclude?.includes(r.name)),
     [repos, section.exclude],
   )
+  const priv = useMemo(
+    () => (section.privateRepos ? privateRepos.filter((r) => !section.exclude?.includes(r.name)) : []),
+    [section.privateRepos, section.exclude],
+  )
   const stars = own.reduce((a, r) => a + r.stargazers_count, 0)
   const top = own
     .toSorted((a, b) => b.stargazers_count - a.stargazers_count || +new Date(b.pushed_at) - +new Date(a.pushed_at))
     .slice(0, section.limit ?? 6)
   const langs = useMemo(() => {
     const count = new Map<string, number>()
-    for (const r of own) if (r.language) count.set(r.language, (count.get(r.language) ?? 0) + 1)
+    for (const r of [...own, ...priv]) if (r.language) count.set(r.language, (count.get(r.language) ?? 0) + 1)
     const total = [...count.values()].reduce((a, b) => a + b, 0) || 1
     return [...count]
       .toSorted((a, b) => b[1] - a[1])
       .slice(0, 6)
       .map(([name, n]) => ({ name, pct: (n / total) * 100 }))
-  }, [own])
+  }, [own, priv])
 
   return (
     <>
@@ -139,7 +144,7 @@ function GithubBody({ section, promise }: { section: GithubSection; promise: Pro
         </a>
         <dl className="gh-stats">
           <div>
-            <dd>{user.public_repos}</dd>
+            <dd>{user.public_repos + priv.length}</dd>
             <dt>{ui.repos}</dt>
           </div>
           <div>
@@ -208,6 +213,39 @@ function GithubBody({ section, promise }: { section: GithubSection; promise: Pro
           </Reveal>
         ))}
       </div>
+
+      {priv.length > 0 && (
+        <>
+          <h3 className="gh-subhead">
+            <Lock className="size-4" /> {ui.privateRepos} <small>{priv.length}</small>
+          </h3>
+          <div className="gh-repos">
+            {priv.map((r, i) => (
+              <Reveal key={r.name} delay={i * 0.05}>
+                <div className="gh-repo" data-private="true">
+                  <div className="gh-repo-head">
+                    <Lock className="size-4" />
+                    <strong>{r.name}</strong>
+                    <span className="gh-badge">{ui.private}</span>
+                  </div>
+                  <p>{r.description ?? 'No description yet.'}</p>
+                  <div className="gh-repo-foot">
+                    {r.language && (
+                      <span>
+                        <i style={{ background: LANG_COLORS[r.language] ?? 'var(--muted)' }} />
+                        {r.language}
+                      </span>
+                    )}
+                    <span className="ml-auto">
+                      {new Date(r.pushed_at).toLocaleDateString('en', { month: 'short', year: 'numeric' })}
+                    </span>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </>
+      )}
     </>
   )
 }

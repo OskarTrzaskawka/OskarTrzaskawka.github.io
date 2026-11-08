@@ -1015,6 +1015,12 @@ kbd {
   display: block;
   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.cover[data-fit='contain'] {
+  background: var(--cover-bg, #0b0c10);
+}
+.cover[data-fit='contain'] > img:first-child {
+  object-fit: contain;
+}
 .project-card:hover .cover > img:first-child,
 .project-card:hover .cover .artwork {
   transform: scale(1.04);
@@ -1384,6 +1390,32 @@ kbd {
   gap: 14px;
   font-size: 0.78rem;
   color: var(--muted);
+}
+.gh-repo[data-private='true'] {
+  border-style: dashed;
+}
+.gh-repo[data-private='true']:hover {
+  transform: none;
+}
+.gh-badge {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.gh-subhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 36px 0 14px;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.gh-subhead small {
+  opacity: 0.7;
 }
 .gh-error {
   padding: 22px;

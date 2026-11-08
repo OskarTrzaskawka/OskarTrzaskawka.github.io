@@ -18,7 +18,7 @@ function track(e: PointerEvent<HTMLElement>) {
 
 function Cover({ project, sizes }: { project: Project; sizes?: string }) {
   return (
-    <motion.div layoutId={`cover-${project.id}`} className="cover">
+    <motion.div layoutId={`cover-${project.id}`} className="cover" data-fit={project.imageFit}>
       {project.image ? (
         <img src={asset(project.image)} alt="" loading="lazy" decoding="async" sizes={sizes} />
       ) : (

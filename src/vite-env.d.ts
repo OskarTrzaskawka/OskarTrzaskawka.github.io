@@ -19,6 +19,12 @@ interface ImportMeta {
   readonly env: ImportMetaEnv
 }
 
+declare module 'virtual:private-repos' {
+  /** Private repos fetched at build time (empty unless a github section sets privateRepos). */
+  const repos: import('./core/types').PrivateRepo[]
+  export default repos
+}
+
 declare module 'virtual:active-persona' {
   const persona: import('./core/types').Persona
   export default persona

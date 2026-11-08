@@ -30,6 +30,8 @@ export const ui = {
   message: 'Message',
   stars: 'stars',
   repos: 'repositories',
+  private: 'Private',
+  privateRepos: 'Private repositories',
   followers: 'followers',
   contributions: 'contributions in the last year',
   languages: 'Languages',

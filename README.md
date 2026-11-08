@@ -387,8 +387,8 @@ A URL replaces the persona's link with the same icon, or is added if missing.
 
 | Type | What it renders | Notable options |
 | --- | --- | --- |
-| `projects` | Project grid + case-study dialog | `layout: cards \| bento \| spotlight \| list`, `filters`, `metrics`, `art` |
-| `github` | Live repos, stars, languages, heatmap | `username`, `limit`, `contributions`, `languages`, `exclude` |
+| `projects` | Project grid + case-study dialog | `layout: cards \| bento \| spotlight \| list`, `filters`, `metrics`, `art`, `imageFit: contain` (whole banner, no crop) |
+| `github` | Live repos, stars, languages, heatmap | `username`, `limit`, `contributions`, `languages`, `exclude`, `privateRepos` ¹ |
 | `gallery` | Masonry/grid + lightbox | `layout`, `filters`, per-image `exif` |
 | `terminal` | Interactive shell | `prompt`, custom `commands` |
 | `skills` | Meters, tags or columns | `variant`, `groups` |
@@ -401,6 +401,8 @@ A URL replaces the persona's link with the same icon, or is added if missing.
 | `writing` | Blog / essay list | `readTime`, `tag` |
 | `about` | Bio + facts | optional `image` |
 | `contact` | Headline, links, form | `rotating`, `form` |
+
+¹ `privateRepos: true` also lists your private repos (marked **Private**, not linked). They are fetched at **build time** with `GH_PRIVATE_TOKEN` (or `gh auth token` locally), so the token never reaches the browser — but repo names and descriptions become public. On GitHub Actions, add a fine-grained token with *Metadata: read* as the `GH_PRIVATE_TOKEN` secret.
 
 Every section accepts `id`, `nav` (label or `false` to hide from the menu), `eyebrow`, `title` and `intro`.
 

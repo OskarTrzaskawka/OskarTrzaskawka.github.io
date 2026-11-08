@@ -37,6 +37,8 @@ jobs:
           VITE_BASE: ${{ steps.pages.outputs.base_path }}/
           VITE_SITE_URL: ${{ vars.VITE_SITE_URL || steps.pages.outputs.base_url }}
           VITE_PERSONA: ${{ vars.VITE_PERSONA }}
+          # Optional fine-grained PAT (Metadata: read) — lists private repos when a github section sets privateRepos.
+          GH_PRIVATE_TOKEN: ${{ secrets.GH_PRIVATE_TOKEN }}
           VITE_SHOWCASE: ${{ vars.VITE_SHOWCASE }}
           VITE_TEMPLATE: ${{ vars.VITE_TEMPLATE }}
           VITE_ACCENT_COLOR: ${{ vars.VITE_ACCENT_COLOR }}

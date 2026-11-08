@@ -1,12 +1,59 @@
+import { execFileSync } from 'node:child_process'
 import { existsSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { runnerImport, type Plugin } from 'vite'
 import { applyEnv, type Env } from '../src/core/env.ts'
 import { fontHref, templates } from '../src/core/templates.ts'
-import type { Persona } from '../src/core/types.ts'
+import type { GithubSection, Persona, PrivateRepo } from '../src/core/types.ts'
 
 const VIRTUAL = 'virtual:active-persona'
 const RESOLVED = '\0' + VIRTUAL
+const PRIVATE = 'virtual:private-repos'
+const PRIVATE_RESOLVED = '\0' + PRIVATE
+
+/** Token for private repos: env first, then the local GitHub CLI. Never exposed to the client. */
+function githubToken(): string | undefined {
+  const t = process.env.GH_PRIVATE_TOKEN || process.env.GITHUB_TOKEN || process.env.GH_TOKEN
+  if (t) return t
+  try {
+    return execFileSync('gh', ['auth', 'token'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() || undefined
+  } catch {
+    return undefined
+  }
+}
+
+/** Lists the user's own private repos and keeps only display-safe fields. */
+async function fetchPrivateRepos(username: string, exclude: string[] = []): Promise<PrivateRepo[]> {
+  const token = githubToken()
+  if (!token) {
+    console.warn('[persona-folio] privateRepos: no token (set GH_PRIVATE_TOKEN or run `gh auth login`) — skipping.')
+    return []
+  }
+  try {
+    const res = await fetch('https://api.github.com/user/repos?visibility=private&affiliation=owner&per_page=100&sort=pushed', {
+      headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(10_000),
+    })
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
+    type Raw = PrivateRepo & { private: boolean; fork: boolean; archived: boolean; owner: { login: string } }
+    const repos = (await res.json()) as Raw[]
+    return repos
+      .filter(
+        (r) => r.private && !r.fork && !r.archived && r.owner.login.toLowerCase() === username.toLowerCase() && !exclude.includes(r.name),
+      )
+      .map(({ name, description, language, stargazers_count, forks_count, pushed_at }) => ({
+        name,
+        description,
+        language,
+        stargazers_count,
+        forks_count,
+        pushed_at,
+      }))
+  } catch (e) {
+    console.warn(`[persona-folio] privateRepos: fetch failed (${(e as Error).message}) — skipping.`)
+    return []
+  }
+}
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
@@ -31,6 +78,7 @@ export function persona(env: Env, root: string): Plugin {
   const showcase = env.VITE_SHOWCASE === 'true'
   let p: Persona
   let base = '/'
+  let privateRepos: PrivateRepo[] = []
 
   return {
     name: 'persona-folio',
@@ -40,12 +88,16 @@ export function persona(env: Env, root: string): Plugin {
       base = config.base
       const { module } = await runnerImport<{ default: Persona }>(file)
       p = applyEnv(module.default, env)
+      const gh = p.sections.find((s): s is GithubSection => s.type === 'github' && !!s.privateRepos)
+      if (gh && !showcase) privateRepos = await fetchPrivateRepos(gh.username, gh.exclude)
     },
 
     resolveId(source) {
       if (source === VIRTUAL) return RESOLVED
+      if (source === PRIVATE) return PRIVATE_RESOLVED
     },
     load(source) {
+      if (source === PRIVATE_RESOLVED) return `export default ${JSON.stringify(privateRepos)}`
       if (source === RESOLVED) return `export { default } from ${JSON.stringify(file.replaceAll('\\', '/'))}`
     },
 
